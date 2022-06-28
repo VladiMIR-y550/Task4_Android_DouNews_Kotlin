@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="article"
+            type="com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_title"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="240dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/news_image"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/iv_author"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/iv_pageViews"
+                app:layout_constraintEnd_toStartOf="@+id/tv_name"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toTopOf="@+id/guideline2"
+                tools:src="@drawable/ic_account" />
+
+            <ImageView
+                android:id="@+id/iv_pageViews"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_preview"
+                app:layout_constraintBottom_toTopOf="@+id/tv_tags"
+                app:layout_constraintEnd_toEndOf="@+id/iv_author"
+                app:layout_constraintEnd_toStartOf="@+id/tv_page_views"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintStart_toStartOf="@+id/iv_author"
+                app:layout_constraintTop_toBottomOf="@+id/iv_author" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/field_margin"
+                android:layout_marginTop="@dimen/field_margin"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:text="@{article.title}"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/text_size_title"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:layout_height="0dp"
+                tools:text="@string/title_news" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:layout_marginBottom="@dimen/field_margin"
+                android:text="@{article.authorName}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_author"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_author"
+                app:layout_constraintTop_toTopOf="@+id/iv_author"
+                tools:text="@string/name" />
+
+            <TextView
+                android:id="@+id/tv_page_views"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:text="@{Integer.toString(article.pageviews)}"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_pageViews"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_pageViews"
+                app:layout_constraintTop_toTopOf="@+id/iv_pageViews"
+                tools:text="@string/count" />
+
+            <TextView
+                android:id="@+id/tv_tags"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/field_margin"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:layout_marginBottom="@dimen/field_margin"
+                android:text="@{article.tags}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toBottomOf="@+id/iv_pageViews"
+                tools:text="@string/tags" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/field_margin"
+                android:layout_marginEnd="@dimen/field_margin"
+                android:layout_marginBottom="@dimen/field_margin"
+                android:text="@{article.date}"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tags"
+                tools:text="@string/date" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.6"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

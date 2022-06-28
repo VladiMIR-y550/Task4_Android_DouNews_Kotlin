@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/newsListFragment">
+    <fragment
+        android:id="@+id/detailNewsFragment"
+        android:name="com.example.task4_android_dounews_kotlin.screens.news_detail.NewsDetailFragment"
+        tools:layout="@layout/fragment_detail_news" >
+        <action
+            android:id="@+id/action_detailNewsFragment_to_newsListFragment4"
+            app:destination="@id/newsListFragment" />
+        <argument
+            android:name="currentUrl"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsListFragment"
+        android:name="com.example.task4_android_dounews_kotlin.screens.news_list.NewsListFragment"
+        tools:layout="@layout/fragment_news_list" >
+        <action
+            android:id="@+id/action_newsListFragment_to_detailNewsFragment"
+            app:destination="@id/detailNewsFragment" />
+    </fragment>
+</navigation>

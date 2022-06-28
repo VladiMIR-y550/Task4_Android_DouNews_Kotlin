@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_wide">16dp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
+    <dimen name="field_margin">8dp</dimen>
+    <dimen name="name_app_25sp">25sp</dimen>
+</resources>

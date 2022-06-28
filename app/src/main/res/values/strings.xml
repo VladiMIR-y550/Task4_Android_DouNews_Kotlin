@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">Task4_Android_DouNews_Kotlin</string>
+    <string name="app_name">Dou News</string>
+
+    <string name="title_news">Title_news</string>
+    <string name="text_news">Text_news</string>
+
+    <string name="appBar_scrolling_view_behavior">AppBar_scrolling_view_behavior</string>
+    <string name="next">next</string>
+    <string name="previous">previous</string>
+    <string name="news_title">News_Title</string>
+    <string name="author_name">Author_name</string>
+    <string name="date_publisher">Date_Publisher</string>
+    <string name="page_views">Page views</string>
+    <string name="tags">Tags</string>
+    <string name="news">News</string>
+    <string name="error_message">Error message</string>
+    <string name="news_image">News image</string>
+    <string name="count">count</string>
+    <string name="name">name</string>
+    <string name="author">Author</string>
+    <string name="date">Date</string>
+    <string name="no_internet_connection">No internet connection!</string>
+    <string name="text_dou_news">DOU News</string>
+    <string name="no_news_to_show_check_your_internet_connection_to_download_news">No news to show. Check your internet connection to download news.</string>
 </resources>

@@ -1,11 +1,52 @@
 package com.example.task4_android_dounews_kotlin
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.example.task4_android_dounews_kotlin.databinding.ActivityMainBinding
+import com.example.task4_android_dounews_kotlin.screens.MainViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var navController: NavController
+    private var _binding: ActivityMainBinding? = null
+    private val mBinding get() = _binding!!
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        setSupportActionBar(mBinding.toolBar)
+
+        navController = Navigation.findNavController(this, R.id.nav_host)
+        val appBarConfig = AppBarConfiguration(navController.graph)
+        mBinding.toolBar.setupWithNavController(navController, appBarConfig)
+
+        subscribeOnNetworkStatus()
+    }
+
+    private fun subscribeOnNetworkStatus() {
+        mBinding.viewModel = viewModel
+
+        mBinding.viewModel = viewModel
+        lifecycleScope.launchWhenStarted {
+            viewModel.changedNetworkStatus
+                .onEach { mBinding.viewModel = viewModel }
+                .collect()
+        }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }
