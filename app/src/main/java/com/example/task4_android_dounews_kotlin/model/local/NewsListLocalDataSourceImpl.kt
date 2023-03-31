@@ -1,12 +1,13 @@
 package com.example.task4_android_dounews_kotlin.model.local
 
-import com.example.task4_android_dounews_kotlin.model.INewsListLocalDataSource
 import com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity
 import com.example.task4_android_dounews_kotlin.model.local.room.NewsListDao
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class RoomNewsListDataSource(private val newsListDao: NewsListDao) :
-    INewsListLocalDataSource {
+class NewsListLocalDataSourceImpl @Inject constructor(
+    private val newsListDao: NewsListDao
+) : NewsListLocalDataSource {
     override fun countDbRows(): Int = newsListDao.countDbRows()
 
     override suspend fun getAllArticles(): Flow<List<ArticleDbEntity>> =

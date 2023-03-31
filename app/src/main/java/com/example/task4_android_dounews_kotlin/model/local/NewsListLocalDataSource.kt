@@ -1,9 +1,9 @@
-package com.example.task4_android_dounews_kotlin.model
+package com.example.task4_android_dounews_kotlin.model.local
 
 import com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity
 import kotlinx.coroutines.flow.Flow
 
-interface INewsListLocalDataSource {
+interface NewsListLocalDataSource {
     fun countDbRows(): Int
 
     suspend fun getAllArticles(): Flow<List<ArticleDbEntity>>

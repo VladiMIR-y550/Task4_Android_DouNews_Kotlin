@@ -3,12 +3,15 @@ package com.example.task4_android_dounews_kotlin.di
 import com.example.task4_android_dounews_kotlin.model.remote.DouApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class RemoteModule {
 
