@@ -7,7 +7,7 @@
     <data>
         <variable
             name="article"
-            type="com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity" />
+            type="com.example.task4_android_dounews_kotlin.domain.modelsUi.ArticleUi" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/viewGroup_item"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless">
 
             <ImageView
@@ -31,7 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:adjustViewBounds="true"
+                android:layout_marginBottom="@dimen/field_margin"
                 android:contentDescription="@string/news_image"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -42,8 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/field_margin"
-                android:layout_marginTop="@dimen/field_margin"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/field_margin"
                 android:text="@{article.title}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textColor="?android:attr/textColorPrimary"
@@ -52,102 +53,74 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_title"
-                app:layout_constraintVertical_chainStyle="spread"
                 tools:text="@string/title_news" />
 
             <ImageView
                 android:id="@+id/iv_author"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="@dimen/field_margin"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="@dimen/field_margin"
                 app:layout_constraintBottom_toTopOf="@+id/tv_tags"
-                app:layout_constraintEnd_toStartOf="@+id/tv_name"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title"
                 tools:src="@drawable/ic_account" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/field_margin"
-                android:layout_marginEnd="@dimen/field_margin"
+                android:layout_marginHorizontal="@dimen/field_margin"
                 android:text="@{article.authorName}"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_author"
-                app:layout_constraintEnd_toStartOf="@+id/iv_pageViews"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/tv_page_views"
                 app:layout_constraintStart_toEndOf="@+id/iv_author"
                 app:layout_constraintTop_toTopOf="@+id/iv_author"
+                app:layout_constraintVertical_bias="0.562"
                 tools:text="@string/name" />
-
-            <ImageView
-                android:id="@+id/iv_pageViews"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/ic_preview"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_author"
-                app:layout_constraintEnd_toStartOf="@+id/tv_page_views"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/center"
-                app:layout_constraintTop_toTopOf="@+id/iv_author" />
 
             <TextView
                 android:id="@+id/tv_page_views"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/field_margin"
                 android:layout_marginEnd="@dimen/field_margin"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
                 android:text="@{Integer.toString(article.pageviews)}"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_pageViews"
+                app:drawableStartCompat="@drawable/ic_preview"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_author"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/iv_pageViews"
-                app:layout_constraintTop_toTopOf="@+id/iv_pageViews"
+                app:layout_constraintTop_toTopOf="@+id/iv_author"
                 tools:text="@string/count" />
 
             <TextView
                 android:id="@+id/tv_tags"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/field_margin"
-                android:layout_marginEnd="@dimen/field_margin"
-                android:layout_marginBottom="8dp"
+                android:layout_marginHorizontal="@dimen/field_margin"
+                android:layout_marginBottom="@dimen/field_margin"
                 android:text="@{article.tags}"
                 android:textColor="@color/gray"
                 app:layout_constraintBottom_toTopOf="@+id/tv_date"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_author"
                 tools:text="@string/tags" />
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/field_margin"
-                android:layout_marginEnd="@dimen/field_margin"
-                android:layout_marginBottom="@dimen/field_margin"
+                android:layout_marginHorizontal="@dimen/field_margin"
                 android:text="@{article.date}"
                 android:textAlignment="center"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tags"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
                 tools:text="@string/date" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/center"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.72" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar

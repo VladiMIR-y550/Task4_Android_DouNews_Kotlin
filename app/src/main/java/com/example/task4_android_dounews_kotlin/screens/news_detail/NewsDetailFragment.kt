@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +17,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.task4_android_dounews_kotlin.databinding.FragmentDetailNewsBinding
 import com.example.task4_android_dounews_kotlin.utils.network.NetworkStatus
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class NewsDetailFragment : Fragment() {
 
     private val args by navArgs<NewsDetailFragmentArgs>()
-    private var _binding: FragmentDetailNewsBinding? = null
-    private val mBinding get() = _binding!!
+    private var bindingInternal: FragmentDetailNewsBinding? = null
+    private val binding get() = bindingInternal!!
     private val viewModel: NewsDetailViewModel by viewModels()
     private lateinit var scrollObserver: Observer<Int>
 
@@ -42,17 +43,17 @@ class NewsDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDetailNewsBinding.inflate(inflater, container, false)
+        bindingInternal = FragmentDetailNewsBinding.inflate(inflater, container, false)
 
         scrollObserver = Observer {
-            mBinding.webViewDetailed.scrollTo(0, it)
+            binding.webViewDetailed.scrollTo(0, it)
         }
 
-        mBinding.viewModel = viewModel
+        binding.viewModel = viewModel
 
         webViewSetup()
         checkNetworkStatus()
-        return mBinding.root
+        return binding.root
     }
 
     override fun onStart() {
@@ -67,35 +68,35 @@ class NewsDetailFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        viewModel.saveScrollPosition(mBinding.webViewDetailed.scrollY)
+        viewModel.saveScrollPosition(binding.webViewDetailed.scrollY)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        bindingInternal = null
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun webViewSetup() {
-        mBinding.viewModel = viewModel
-        mBinding.webViewDetailed.apply {
+        binding.viewModel = viewModel
+        binding.webViewDetailed.apply {
             settings.javaScriptEnabled = true
             settings.builtInZoomControls = true
             settings.displayZoomControls = false
         }
 
-        mBinding.webViewDetailed.webViewClient = object : WebViewClient() {
+        binding.webViewDetailed.webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-                mBinding.webViewDetailed.visibility = View.GONE
-                mBinding.pbDetail.visibility = View.VISIBLE
+                binding.webViewDetailed.visibility = View.GONE
+                binding.pbDetail.visibility = View.VISIBLE
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                mBinding.pbDetail.visibility = View.GONE
-                mBinding.webViewDetailed.visibility = View.VISIBLE
+                binding.pbDetail.visibility = View.GONE
+                binding.webViewDetailed.visibility = View.VISIBLE
             }
         }
     }
@@ -105,7 +106,7 @@ class NewsDetailFragment : Fragment() {
             viewModel.changedNetworkStatus
                 .onEach {
                     if (it == NetworkStatus.Available) {
-                        mBinding.viewModel = viewModel
+                        binding.viewModel = viewModel
                     }
                 }
                 .collect()

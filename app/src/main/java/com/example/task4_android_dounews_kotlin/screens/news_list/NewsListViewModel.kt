@@ -1,15 +1,16 @@
 package com.example.task4_android_dounews_kotlin.screens.news_list
 
-import android.app.Application
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.task4_android_dounews_kotlin.domain.modelsUi.ArticleUi
 import com.example.task4_android_dounews_kotlin.model.NewsListRepository
-import com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity
 import com.example.task4_android_dounews_kotlin.screens.BaseViewModel
 import com.example.task4_android_dounews_kotlin.utils.*
 import com.example.task4_android_dounews_kotlin.utils.network.NetworkStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,22 +18,25 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsListViewModel(private val repository: NewsListRepository, application: Application) :
-    BaseViewModel(application),
-    AdapterActionListener {
+@HiltViewModel
+class NewsListViewModel @Inject constructor(
+    private val repository: NewsListRepository,
+    @ApplicationContext applicationContext: Context
+) :
+    BaseViewModel(applicationContext) {
 
-    private val _articles = MutableLiveData<Result<List<ArticleDbEntity>>>()
-    val articles: LiveData<Result<List<ArticleDbEntity>>> = _articles
+    private val _articles = MutableLiveData<Result<List<ArticleUi>>>()
+    val articles: LiveData<Result<List<ArticleUi>>> = _articles
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError(throwable)
     }
-    private var articlesResult: Result<List<ArticleDbEntity>> = EmptyResult()
+    private var articlesResult: Result<List<ArticleUi>> = EmptyResult()
         set(value) {
             field = value
             notifyUpdates()
-            Log.d("ARTICLE_RESULT", "ARTICLE_RESULT = ${articlesResult.javaClass.name}")
         }
 
     var baseSize: Int = 0
@@ -46,8 +50,7 @@ class NewsListViewModel(private val repository: NewsListRepository, application:
         getArticles(numberPagesLoaded = baseSize)
     }
 
-    override fun loadPage(page: Int) {
-        Log.d("TAG", "loadPage from pageAdapter = $page")
+    fun loadPage(page: Int) {
         getArticles(page = page)
     }
 
@@ -56,7 +59,6 @@ class NewsListViewModel(private val repository: NewsListRepository, application:
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             repository.getAllNews().shareIn(viewModelScope, SharingStarted.Eagerly, 1)
                 .onEach { articles ->
-                    Log.d("SubscribeOnNews", "Subscribe articles = $articles")
                     baseSize = articles.size
                     articlesResult = if (articles.isEmpty()) {
                         EmptyResult()

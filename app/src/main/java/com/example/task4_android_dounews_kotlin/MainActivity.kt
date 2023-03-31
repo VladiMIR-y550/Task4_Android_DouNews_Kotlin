@@ -11,9 +11,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.task4_android_dounews_kotlin.databinding.ActivityMainBinding
 import com.example.task4_android_dounews_kotlin.screens.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun subscribeOnNetworkStatus() {
         mBinding.viewModel = viewModel
-
+        //TODO проверить, убрать если что
         mBinding.viewModel = viewModel
         lifecycleScope.launchWhenStarted {
             viewModel.changedNetworkStatus
