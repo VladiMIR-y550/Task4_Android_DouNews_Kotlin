@@ -1,24 +1,21 @@
 package com.example.task4_android_dounews_kotlin.screens.news_detail
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.annotation.RequiresApi
+import android.webkit.*
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.task4_android_dounews_kotlin.R
 import com.example.task4_android_dounews_kotlin.base.BaseFragment
 import com.example.task4_android_dounews_kotlin.databinding.FragmentDetailNewsBinding
+import com.example.task4_android_dounews_kotlin.domain.modelsUi.WebPageUi
 import com.example.task4_android_dounews_kotlin.utils.network.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -29,38 +26,28 @@ class NewsDetailFragment : BaseFragment<FragmentDetailNewsBinding>() {
 
     private val args by navArgs<NewsDetailFragmentArgs>()
     private val viewModel: NewsDetailViewModel by viewModels()
-    private lateinit var scrollObserver: Observer<Int>
 
     override val viewBindingProvider: (LayoutInflater, ViewGroup?) -> FragmentDetailNewsBinding =
         { inflater, container ->
             DataBindingUtil.inflate(inflater, R.layout.fragment_detail_news, container, false)
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            viewModel.downloadDetailedNews(args.currentUrl)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scrollObserver = Observer {
-            binding.webViewDetailed.scrollTo(0, it)
-        }
-        binding.viewModel = viewModel
+        viewModel.downloadDetailedNews(args.currentUrl)
+        viewModel.webPageState.observe(viewLifecycleOwner, ::renderState)
         webViewSetup()
         checkNetworkStatus()
     }
 
-    override fun onStart() {
-        viewModel.scrollPosition.observe(viewLifecycleOwner, scrollObserver)
-        super.onStart()
-    }
+    private fun renderState(webPageUiState: WebPageUi) {
+        with(binding) {
+            Log.d("TAG", "Url ${webPageUiState.selectedNews}")
+            webPageUi = webPageUiState
+            webViewDetailed.scrollTo(0, webPageUiState.scrollPagePosition)
+            pbDetail.isVisible = webPageUiState.isProgress
 
-    override fun onStop() {
-        viewModel.scrollPosition.removeObserver(scrollObserver)
-        super.onStop()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -70,25 +57,23 @@ class NewsDetailFragment : BaseFragment<FragmentDetailNewsBinding>() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun webViewSetup() {
-        binding.viewModel = viewModel
+        CookieManager.getInstance().setAcceptCookie(true)
+        CookieManager.getInstance().setAcceptThirdPartyCookies(binding.webViewDetailed, true)
         binding.webViewDetailed.apply {
+            setInitialScale(1)
             settings.javaScriptEnabled = true
             settings.builtInZoomControls = true
             settings.displayZoomControls = false
+            settings.allowContentAccess = true
+            settings.allowFileAccess = true
+            settings.loadWithOverviewMode = true
+            settings.useWideViewPort = true
+            settings.domStorageEnabled = true
         }
-
         binding.webViewDetailed.webViewClient = object : WebViewClient() {
-
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                binding.webViewDetailed.visibility = View.GONE
-                binding.pbDetail.visibility = View.VISIBLE
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                binding.pbDetail.visibility = View.GONE
-                binding.webViewDetailed.visibility = View.VISIBLE
+            override fun onPageCommitVisible(view: WebView?, url: String?) {
+                super.onPageCommitVisible(view, url)
+                viewModel.updateIsProgress(false)
             }
         }
     }
@@ -98,7 +83,7 @@ class NewsDetailFragment : BaseFragment<FragmentDetailNewsBinding>() {
             viewModel.changedNetworkStatus
                 .onEach {
                     if (it == NetworkStatus.Available) {
-                        binding.viewModel = viewModel
+                        binding.webPageUi = viewModel.webPageState.value
                     }
                 }
                 .collect()
