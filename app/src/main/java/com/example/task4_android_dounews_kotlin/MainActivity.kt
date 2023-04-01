@@ -1,6 +1,7 @@
 package com.example.task4_android_dounews_kotlin
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -36,9 +37,12 @@ class MainActivity : AppCompatActivity() {
         subscribeOnNetworkStatus()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_selected_news, menu)
+        return true
+    }
+
     private fun subscribeOnNetworkStatus() {
-        mBinding.viewModel = viewModel
-        //TODO проверить, убрать если что
         mBinding.viewModel = viewModel
         lifecycleScope.launchWhenStarted {
             viewModel.changedNetworkStatus
