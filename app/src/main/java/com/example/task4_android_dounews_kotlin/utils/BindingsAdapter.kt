@@ -2,7 +2,9 @@ package com.example.task4_android_dounews_kotlin.utils
 
 import android.view.View
 import android.webkit.WebView
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.example.task4_android_dounews_kotlin.R
 import com.example.task4_android_dounews_kotlin.utils.network.NetworkStatus
 
 @BindingAdapter(value = ["app.pageUrl"], requireAll = true)
@@ -20,4 +22,9 @@ fun networkStatus(view: View, networkStatus: NetworkStatus) {
             view.visibility = View.GONE
         }
     }
+}
+
+@BindingAdapter(value = ["app.isSelected"], requireAll = true)
+fun articleIsSelect(view: ImageView, isSelected: Boolean) {
+    if (isSelected) view.setImageResource(R.drawable.ic_bookmark) else view.setImageResource(R.drawable.ic_bookmark_border)
 }

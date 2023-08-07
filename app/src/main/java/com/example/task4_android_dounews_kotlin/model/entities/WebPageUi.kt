@@ -1,4 +1,4 @@
-package com.example.task4_android_dounews_kotlin.domain.modelsUi
+package com.example.task4_android_dounews_kotlin.model.entities
 
 data class WebPageUi(
     val selectedNews: String = "",

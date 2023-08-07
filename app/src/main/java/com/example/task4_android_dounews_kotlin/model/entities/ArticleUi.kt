@@ -1,4 +1,6 @@
-package com.example.task4_android_dounews_kotlin.domain.modelsUi
+package com.example.task4_android_dounews_kotlin.model.entities
+
+import com.example.task4_android_dounews_kotlin.base.Item
 
 data class ArticleUi(
     val id: Long,
@@ -16,7 +18,8 @@ data class ArticleUi(
     val imgSmall2x: String,
     val authorName: String,
     val authorUrl: String,
-    var published: String = "",
+    var published: String,
     val date: String,
-    val dateLong: Long
-)
+    val dateLong: Long,
+    val isSelected: Boolean
+) : Item

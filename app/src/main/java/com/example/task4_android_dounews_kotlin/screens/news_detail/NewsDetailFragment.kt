@@ -2,7 +2,6 @@ package com.example.task4_android_dounews_kotlin.screens.news_detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.task4_android_dounews_kotlin.R
 import com.example.task4_android_dounews_kotlin.base.BaseFragment
 import com.example.task4_android_dounews_kotlin.databinding.FragmentDetailNewsBinding
-import com.example.task4_android_dounews_kotlin.domain.modelsUi.WebPageUi
+import com.example.task4_android_dounews_kotlin.model.entities.WebPageUi
 import com.example.task4_android_dounews_kotlin.utils.network.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -35,18 +34,18 @@ class NewsDetailFragment : BaseFragment<FragmentDetailNewsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.downloadDetailedNews(args.currentUrl)
-        viewModel.webPageState.observe(viewLifecycleOwner, ::renderState)
+        lifecycleScope.launchWhenStarted {
+            viewModel.webPage.collect(::renderState)
+        }
         webViewSetup()
         checkNetworkStatus()
     }
 
     private fun renderState(webPageUiState: WebPageUi) {
         with(binding) {
-            Log.d("TAG", "Url ${webPageUiState.selectedNews}")
             webPageUi = webPageUiState
             webViewDetailed.scrollTo(0, webPageUiState.scrollPagePosition)
             pbDetail.isVisible = webPageUiState.isProgress
-
         }
     }
 
@@ -83,7 +82,7 @@ class NewsDetailFragment : BaseFragment<FragmentDetailNewsBinding>() {
             viewModel.changedNetworkStatus
                 .onEach {
                     if (it == NetworkStatus.Available) {
-                        binding.webPageUi = viewModel.webPageState.value
+                        binding.webPageUi = viewModel.webPage.value
                     }
                 }
                 .collect()

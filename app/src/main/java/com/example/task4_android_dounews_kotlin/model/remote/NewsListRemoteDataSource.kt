@@ -1,5 +1,6 @@
 package com.example.task4_android_dounews_kotlin.model.remote
 
+import com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity
 import com.example.task4_android_dounews_kotlin.model.remote.pojo.NewsListResponseEntity
 import retrofit2.Response
 

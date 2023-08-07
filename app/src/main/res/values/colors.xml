@@ -9,4 +9,5 @@
     <color name="background_card_color">#E4E4E4</color>
     <color name="background_internet_alert_color">@color/design_default_color_error</color>
     <color name="ic_launcher_background">#82FFBA</color>
+    <color name="transparent">#00000000</color>
 </resources>
