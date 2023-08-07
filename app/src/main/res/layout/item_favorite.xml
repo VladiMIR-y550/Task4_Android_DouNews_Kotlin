@@ -27,14 +27,12 @@
 
             <ImageView
                 android:id="@+id/iv_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="@dimen/field_margin"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/news_image"
-                app:layout_constraintBottom_toTopOf="@+id/tv_title"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@mipmap/ic_launcher" />
@@ -42,14 +40,15 @@
             <ImageView
                 android:id="@+id/iv_selected_news"
                 app.isSelected="@{article.selected}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/background_icon"
                 android:padding="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_date"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tags"
                 tools:src="@drawable/ic_bookmark_border" />
 
             <TextView
@@ -57,25 +56,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/field_margin"
-                android:layout_marginBottom="@dimen/field_margin"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:singleLine="false"
                 android:text="@{article.title}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="@dimen/text_size_title"
-                app:layout_constraintBottom_toTopOf="@+id/iv_author"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/title_news" />
 
             <ImageView
                 android:id="@+id/iv_author"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="@dimen/field_margin"
-                app:layout_constraintBottom_toTopOf="@+id/tv_tags"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/field_margin"
+                app:layout_constraintStart_toStartOf="@+id/tv_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
                 tools:src="@drawable/ic_account" />
 
             <TextView
@@ -110,12 +110,12 @@
                 android:id="@+id/tv_tags"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/field_margin"
+                android:layout_margin="@dimen/field_margin"
                 android:text="@{article.tags}"
                 android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@+id/iv_selected_news"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
+                app:layout_constraintTop_toBottomOf="@+id/iv_author"
                 tools:text="@string/tags" />
 
             <TextView
@@ -128,10 +128,13 @@
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_selected_news"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_title"
                 tools:text="@string/date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <ProgressBar
             android:id="@+id/pb_item"

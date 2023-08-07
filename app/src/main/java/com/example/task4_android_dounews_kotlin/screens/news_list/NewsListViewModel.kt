@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.task4_android_dounews_kotlin.domain.modelsUi.ArticleUi
+import com.example.task4_android_dounews_kotlin.domain.useCase.FavoritesUseCase
+import com.example.task4_android_dounews_kotlin.model.entities.ArticleUi
 import com.example.task4_android_dounews_kotlin.model.NewsListRepository
 import com.example.task4_android_dounews_kotlin.screens.BaseViewModel
 import com.example.task4_android_dounews_kotlin.utils.*
@@ -13,22 +14,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val repository: NewsListRepository,
+    private val favoritesUseCase: FavoritesUseCase,
     @ApplicationContext applicationContext: Context
 ) :
     BaseViewModel(applicationContext) {
 
-    private val _articles = MutableLiveData<Result<List<ArticleUi>>>()
-    val articles: LiveData<Result<List<ArticleUi>>> = _articles
+    private val articlesStateInternal = MutableLiveData<Result<List<ArticleUi>>>()
+    val articlesState: LiveData<Result<List<ArticleUi>>> = articlesStateInternal
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError(throwable)
@@ -70,6 +69,12 @@ class NewsListViewModel @Inject constructor(
         }
     }
 
+    fun newsIsSelected(news: ArticleUi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesUseCase.changeFavoritesStateArticle(articleUi = news)
+        }
+    }
+
     private fun getArticles(numberPagesLoaded: Int = AMOUNT_DOWNLOAD_PAGES, page: Int = 0) {
         when (networkStatus) {
             NetworkStatus.Available -> {
@@ -90,6 +95,16 @@ class NewsListViewModel @Inject constructor(
     }
 
     private fun notifyUpdates() {
-        _articles.postValue(articlesResult)
+        articlesStateInternal.postValue(articlesResult)
     }
+
+//    fun showFavorites() {
+//        articlesResult = PendingResult()
+//        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+//            repository.getFavoritesNews().collect { favorites ->
+//                articlesResult =
+//                    if (favorites.isEmpty()) EmptyResult() else SuccessResult(favorites)
+//            }
+//        }
+//    }
 }

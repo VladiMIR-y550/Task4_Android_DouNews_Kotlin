@@ -1,0 +1,3 @@
+package com.example.task4_android_dounews_kotlin.base
+
+interface Item

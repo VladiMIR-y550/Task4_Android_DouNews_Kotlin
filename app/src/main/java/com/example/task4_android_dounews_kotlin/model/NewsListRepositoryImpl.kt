@@ -1,9 +1,8 @@
 package com.example.task4_android_dounews_kotlin.model
 
-import com.example.task4_android_dounews_kotlin.domain.modelsUi.ArticleUi
+import com.example.task4_android_dounews_kotlin.model.entities.ArticleUi
 import com.example.task4_android_dounews_kotlin.model.local.NewsListLocalDataSource
 import com.example.task4_android_dounews_kotlin.model.local.room.ArticleDbEntity
-import com.example.task4_android_dounews_kotlin.model.mappers.NewsMapper
 import com.example.task4_android_dounews_kotlin.model.remote.NewsListRemoteDataSource
 import com.example.task4_android_dounews_kotlin.model.remote.pojo.NewsResponseEntity
 import com.example.task4_android_dounews_kotlin.utils.AMOUNT_DOWNLOAD_PAGES
@@ -16,28 +15,57 @@ import javax.inject.Inject
 class NewsListRepositoryImpl @Inject constructor(
     private val localDataSource: NewsListLocalDataSource,
     private val remoteDataSource: NewsListRemoteDataSource,
-    private val mapper: NewsMapper<ArticleDbEntity, ArticleUi, NewsResponseEntity>
 ) : NewsListRepository {
 
     override suspend fun getAllNews(): Flow<List<ArticleUi>> {
         if (localDataSource.countDbRows() == 0) {
             downloadNews(numberPagesLoaded = AMOUNT_DOWNLOAD_PAGES, page = 0)
         }
-        return localDataSource.getAllArticles().map {
-            mapper.toUiEntityList(it)
+        return localDataSource.getAllArticlesFlow().map { news ->
+            news.map { article ->
+                article.toArticleUi()
+            }
+        }
+    }
+
+    override suspend fun getFavoritesNews(): Flow<List<ArticleUi>> {
+        return localDataSource.getFavoritesNews().map { articles ->
+            articles.map { article ->
+                article.toArticleUi()
+            }
         }
     }
 
     override suspend fun downloadNews(numberPagesLoaded: Int, page: Int) {
-        val response = remoteDataSource.downloadNewsList(numberPagesLoaded, page)
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
+            val allNews = localDataSource.getAllArticles()
+            val response = remoteDataSource.downloadNewsList(numberPagesLoaded, page)
             if (response.isSuccessful) {
                 response.body()?.also { news ->
-                    news.results.forEach {
-                        localDataSource.saveArticleToDatabase(mapper.fromResponseEntity(it))
+                    news.results.forEach { responseArticle ->
+                        allNews.find { it.articleDbEntity.id == responseArticle.id }
+                            ?.let {
+                                localDataSource.updateArticlesInDatabase(
+                                    ArticleDbEntity.fromNewsResponseEntity(
+                                        responseArticle
+                                    )
+                                )
+                            } ?: savedNewArticle(responseArticle)
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun savedNewArticle(responseArticle: NewsResponseEntity) {
+        val article = ArticleDbEntity.fromNewsResponseEntity(responseArticle)
+        localDataSource.saveArticleToDatabase(article)
+        localDataSource.saveIsSelected(article)
+    }
+
+    override suspend fun articleIsSelected(article: ArticleUi) {
+        withContext(Dispatchers.IO) {
+            localDataSource.updateIsSelected(article)
         }
     }
 }

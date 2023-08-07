@@ -1,45 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.news_detail.NewsDetailFragment">
 
     <data>
-
         <variable
-            name="viewModel"
-            type="com.example.task4_android_dounews_kotlin.screens.news_detail.NewsDetailViewModel" />
+            name="webPageUi"
+            type="com.example.task4_android_dounews_kotlin.model.entities.WebPageUi" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <WebView
             android:id="@+id/webView_detailed"
-            app.pageUrl="@{viewModel.selectedNews}"
-            app.withInternet="@{viewModel.networkStatus}"
+            app.pageUrl="@{webPageUi.selectedNews}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:focusableInTouchMode="true" />
 
         <ProgressBar
             android:id="@+id/pb_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:layout_gravity="center" />
+    </FrameLayout>
 </layout>

@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "f0ab2751d3bc7dba5b3c7e71b4c26b03",
+    "version": 2,
+    "identityHash": "387ec27fb94f77a897779bf4804c8802",
     "entities": [
       {
         "tableName": "articles_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `category` TEXT NOT NULL, `categoryUrl` TEXT NOT NULL, `announcement` TEXT NOT NULL, `tags` TEXT NOT NULL, `pageviews` INTEGER NOT NULL, `commentsCount` INTEGER NOT NULL, `imgBig` TEXT, `imgBig2x` TEXT NOT NULL, `imgSmall` TEXT NOT NULL, `imgSmall2x` TEXT NOT NULL, `authorName` TEXT NOT NULL, `authorUrl` TEXT NOT NULL, `published` TEXT NOT NULL, `date` TEXT NOT NULL, `dateLong` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `category` TEXT NOT NULL, `category_url` TEXT NOT NULL, `announcement` TEXT NOT NULL, `tags` TEXT NOT NULL, `pageviews` INTEGER NOT NULL, `comments_count` INTEGER NOT NULL, `img_big` TEXT, `img_big_2x` TEXT NOT NULL, `img_small` TEXT NOT NULL, `img_small_2x` TEXT NOT NULL, `authorName` TEXT NOT NULL, `author_url` TEXT NOT NULL, `published` TEXT NOT NULL, `date` TEXT NOT NULL, `date_long` INTEGER NOT NULL, `is_selected` INTEGER NOT NULL DEFAULT false, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -34,7 +34,7 @@
           },
           {
             "fieldPath": "categoryUrl",
-            "columnName": "categoryUrl",
+            "columnName": "category_url",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -58,31 +58,31 @@
           },
           {
             "fieldPath": "commentsCount",
-            "columnName": "commentsCount",
+            "columnName": "comments_count",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "imgBig",
-            "columnName": "imgBig",
+            "columnName": "img_big",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "imgBig2x",
-            "columnName": "imgBig2x",
+            "columnName": "img_big_2x",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "imgSmall",
-            "columnName": "imgSmall",
+            "columnName": "img_small",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "imgSmall2x",
-            "columnName": "imgSmall2x",
+            "columnName": "img_small_2x",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -94,7 +94,7 @@
           },
           {
             "fieldPath": "authorUrl",
-            "columnName": "authorUrl",
+            "columnName": "author_url",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -112,16 +112,23 @@
           },
           {
             "fieldPath": "dateLong",
-            "columnName": "dateLong",
+            "columnName": "date_long",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isSelected",
+            "columnName": "is_selected",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "false"
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -130,7 +137,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f0ab2751d3bc7dba5b3c7e71b4c26b03')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '387ec27fb94f77a897779bf4804c8802')"
     ]
   }
 }
